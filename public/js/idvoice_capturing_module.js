@@ -16,7 +16,14 @@ export class IDVoiceCapturingModule {
     this.isRecording = false;
 
     let self = this;
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+
+    let audioConstraints = { 
+      noiseSuppression: false,
+      echoCancellation: false,
+      autoGainControl: false
+    }
+
+    navigator.mediaDevices.getUserMedia({ audio: audioConstraints}).then(function(stream) {
       self.context = new AudioContext();
       self.audioInput = self.context.createMediaStreamSource(stream);
       self.context.audioWorklet.addModule('js/audio_worklet.js').then(() => {
